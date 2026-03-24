@@ -47,8 +47,15 @@ def build_report(entity: ValidatedEntityRecord, score: ScoreData) -> dict[str, A
         "pipeline_run_id": entity.pipeline_run_id or score.pipeline_run_id,
         "entity_id": entity.entity_id,
         "status": "partial" if entity.state == RecordState.PARTIAL else "success",
+        "header": {
+            "entity_id": entity.entity_id,
+            "entity_name": entity.entity_name,
+            "pipeline_run_id": entity.pipeline_run_id or score.pipeline_run_id,
+            "status": "partial" if entity.state == RecordState.PARTIAL else "success",
+        },
         "entity": _build_entity_section(entity, metadata),
         "kmp_summary": _build_kmp_summary_section(kmp_records, compensation_records),
+        "eich_score_summary": _build_score_section(score),
         "score_summary": _build_score_section(score),
         "provenance_summary": _build_provenance_section(entity, kmp_records, compensation_records),
         "quality": {
@@ -56,6 +63,11 @@ def build_report(entity: ValidatedEntityRecord, score: ScoreData) -> dict[str, A
             "is_partial": entity.state == RecordState.PARTIAL,
             "warnings": quality_warnings,
             "warnings_count": len(quality_warnings),
+        },
+        "report_accuracy": {
+            "state": state_value,
+            "warnings_count": len(quality_warnings),
+            "is_partial": entity.state == RecordState.PARTIAL,
         },
         "sections": {
             "partial_data_warning": _build_partial_warning(entity.state, quality_warnings),
