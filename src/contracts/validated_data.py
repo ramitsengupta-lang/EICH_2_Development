@@ -51,6 +51,8 @@ class KMPRecord:
     last_observed_date: date | None = None
     compensation: list[CompensationRecord] = field(default_factory=list)
     state: RecordState = RecordState.VALIDATED
+    email: str = ""
+    experience: str | None = None
 
 
 @dataclass
@@ -69,3 +71,27 @@ class ValidatedEntityRecord:
     quality_warnings: list[str] = field(default_factory=list)
     state: RecordState = RecordState.VALIDATED
     pipeline_run_id: str = ""
+    # Location & accreditation
+    city: str = ""
+    year_of_establishment: int | None = None
+    regulatory_body: str = ""
+    naac_grade: str = ""
+    sanctioned_intake: int | None = None
+    main_programs: list[str] = field(default_factory=list)
+    # Governing body
+    registered_address: str = ""
+    governing_body_name: str = ""
+    governing_body_type: str = ""
+    governing_body_year_established: int | None = None
+    governed_institutions: list[str] = field(default_factory=list)
+    governing_body_trustees: list[dict] = field(default_factory=list)
+    # Outcome
+    placement_rate: float | None = None
+    median_salary_lpa: float | None = None
+    higher_studies: str | None = None
+    top_recruiters: list[str] = field(default_factory=list)
+    # Banking
+    banking_opportunities: list[dict] = field(default_factory=list)
+    # Report accuracy
+    report_accuracy_overall: float | None = None
+    report_accuracy_sections: dict[str, float] = field(default_factory=dict)

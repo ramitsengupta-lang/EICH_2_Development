@@ -1,0 +1,21 @@
+{
+  "pipeline_run_id": "run-local-2379b9e4",
+  "run_duration_seconds": 0.0,
+  "run_finished_at": "2026-03-25T14:12:28.193226+00:00",
+  "run_started_at": "2026-03-25T14:12:28.193226+00:00",
+  "stage_sequence": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "stage_timings": {
+    "M1": 0.0,
+    "M2": 0.0,
+    "M3": 0.0,
+    "M4": 0.0
+  },
+  "status": "failed",
+  "warnings_count": 0
+}

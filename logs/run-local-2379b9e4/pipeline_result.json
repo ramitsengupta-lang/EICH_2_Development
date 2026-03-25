@@ -1,0 +1,18 @@
+{
+  "error": {
+    "details": {},
+    "reason": "entity_records cannot be empty",
+    "stage": "M5",
+    "type": "ValueError"
+  },
+  "pipeline_run_id": "run-local-2379b9e4",
+  "stage_sequence": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "status": "failed",
+  "warnings": []
+}

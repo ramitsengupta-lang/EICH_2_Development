@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EICH 2 Diagnostic Report</title>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; background: #f4f6f8; margin: 0; padding: 24px; }
+    .card { max-width: 980px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+    h1 { margin-top: 0; }
+    .badge { display: inline-block; background: #fee2e2; color: #991b1b; border-radius: 999px; padding: 4px 10px; font-weight: 700; font-size: 12px; }
+    pre { background: #0b1020; color: #d1d5db; padding: 12px; border-radius: 8px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>EICH 2 Diagnostic Report</h1>
+    <p><span class="badge">FAILED</span></p>
+    <p>Run ID: <strong>run-local-2379b9e4</strong></p>
+    <p>The pipeline did not return a final HTML report for this run. See error payload below.</p>
+    <pre>{
+  "type": "ValueError",
+  "stage": "M5",
+  "reason": "entity_records cannot be empty",
+  "details": {}
+}</pre>
+  </div>
+</body>
+</html>

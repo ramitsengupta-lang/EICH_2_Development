@@ -27,3 +27,4 @@ class ScoreData:
   contributing_fields: dict[str, str] = field(default_factory=dict)
   rating: str = ""
   remarks: str = ""
+  gatekeeper_status: str = ""

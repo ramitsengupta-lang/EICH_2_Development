@@ -18,6 +18,9 @@ pydantic>=2.0.0               # optional runtime validation layer (supplement to
 # Serialisation
 orjson>=3.9.0                 # fast JSON serialisation for report output
 
+# Templating
+jinja2>=3.1.0                 # HTML report rendering in m8_report_builder
+
 # Testing
 pytest>=8.0.0
 pytest-cov>=5.0.0

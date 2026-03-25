@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EICH Institutional Credit Intelligence Report</title>
+
+<style>
+
+body{
+font-family:Segoe UI, Arial, sans-serif;
+background:#eef1f5;
+margin:0;
+padding:40px;
+color:#222;
+}
+
+.report{
+max-width:1100px;
+margin:auto;
+background:white;
+padding:40px;
+box-shadow:0 6px 25px rgba(0,0,0,0.08);
+}
+
+.header{
+border-bottom:3px solid #2c3e50;
+padding-bottom:15px;
+margin-bottom:30px;
+}
+
+.header h1{
+margin:0;
+font-size:28px;
+}
+
+.meta{
+margin-top:6px;
+font-size:13px;
+color:#666;
+}
+
+.section{
+margin-top:40px;
+}
+
+.section h2{
+border-left:6px solid #2c3e50;
+padding-left:10px;
+font-size:20px;
+margin-bottom:15px;
+}
+
+.section h3{
+font-size:15px;
+margin:18px 0 8px;
+color:#2c3e50;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+}
+
+th{
+background:#f2f4f7;
+text-align:left;
+padding:9px;
+border-bottom:2px solid #ddd;
+}
+
+td{
+padding:9px;
+border-bottom:1px solid #e5e5e5;
+}
+
+.score-dashboard{
+display:flex;
+gap:30px;
+align-items:center;
+margin-top:10px;
+flex-wrap:wrap;
+}
+
+.score-circle{
+width:110px;
+height:110px;
+border-radius:50%;
+background:#1e8449;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:36px;
+font-weight:bold;
+flex-shrink:0;
+}
+
+.score-cards{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.card{
+background:#f7f9fc;
+padding:15px;
+border-radius:6px;
+width:180px;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.card-title{
+font-size:12px;
+color:#777;
+}
+
+.card-value{
+font-size:20px;
+font-weight:bold;
+margin-top:4px;
+}
+
+.opportunity{
+background:#f8fbff;
+border-left:4px solid #1b4f72;
+padding:12px;
+margin-top:10px;
+}
+
+ul{
+margin-top:6px;
+padding-left:20px;
+}
+
+ul li{
+margin-bottom:4px;
+}
+
+.no-data{
+color:#aaa;
+font-style:italic;
+font-size:13px;
+}
+
+.entity-legend{
+display:flex;
+flex-wrap:wrap;
+gap:12px;
+margin:14px 0 18px;
+}
+
+.entity-legend-item{
+display:flex;
+align-items:center;
+gap:8px;
+padding:8px 12px;
+border-radius:999px;
+font-size:13px;
+background:#f5f7fa;
+color:#334155;
+}
+
+.legend-dot{
+width:10px;
+height:10px;
+border-radius:50%;
+display:inline-block;
+}
+
+.legend-dot.high{ background:#1e8449; }
+.legend-dot.medium{ background:#1f6feb; }
+.legend-dot.low{ background:#6b7280; }
+
+.associated-entities{
+display:grid;
+gap:14px;
+}
+
+.entity-card{
+border:1px solid #d7deea;
+border-left:6px solid #6b7280;
+border-radius:14px;
+padding:16px 18px;
+background:linear-gradient(135deg,#ffffff 0%,#f8fafc 100%);
+box-shadow:0 10px 24px rgba(15,23,42,0.06);
+transition:transform 0.18s ease,box-shadow 0.18s ease;
+}
+
+.entity-card:hover{
+transform:translateY(-2px);
+box-shadow:0 16px 32px rgba(15,23,42,0.10);
+}
+
+.entity-card.high{
+border-left-color:#1e8449;
+background:linear-gradient(135deg,#f5fff8 0%,#ffffff 100%);
+}
+
+.entity-card.medium{
+border-left-color:#1f6feb;
+background:linear-gradient(135deg,#f5f9ff 0%,#ffffff 100%);
+}
+
+.entity-card.low{
+border-left-color:#6b7280;
+background:linear-gradient(135deg,#f7f7f8 0%,#ffffff 100%);
+}
+
+.entity-card-header{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.entity-title{ display:flex; flex-direction:column; gap:4px; }
+.entity-name{ font-size:17px; font-weight:600; color:#0f172a; }
+.entity-type{ font-size:13px; color:#64748b; }
+
+.confidence-badge{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:6px 10px;
+border-radius:999px;
+font-size:12px;
+font-weight:600;
+white-space:nowrap;
+}
+
+.confidence-badge.high{ background:#d9f5e5; color:#166534; }
+.confidence-badge.medium{ background:#dbeafe; color:#1d4ed8; }
+.confidence-badge.low{ background:#e5e7eb; color:#374151; }
+
+.entity-relationship{ margin-top:12px; font-size:14px; font-weight:600; color:#1f2937; }
+.entity-evidence{ margin-top:10px; font-size:13px; line-height:1.5; color:#475569; }
+.entity-evidence strong{ color:#0f172a; }
+
+.entity-verification{
+margin-top:12px;
+display:inline-flex;
+align-items:center;
+padding:7px 10px;
+border-radius:10px;
+background:#f3f4f6;
+color:#374151;
+font-size:12px;
+font-weight:600;
+}
+
+.entity-empty-state{
+padding:20px 22px;
+border:1px dashed #cbd5e1;
+border-radius:16px;
+background:linear-gradient(135deg,#f8fafc 0%,#ffffff 100%);
+}
+
+.accuracy-panel{
+margin-top:42px;
+background:linear-gradient(135deg,#f4f8ff 0%,#eef6f0 100%);
+border:1px solid #d4e4dc;
+border-radius:14px;
+padding:20px;
+}
+
+.accuracy-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
+flex-wrap:wrap;
+}
+
+.accuracy-overall{
+display:flex;
+align-items:baseline;
+gap:10px;
+}
+
+.accuracy-label{
+font-size:13px;
+text-transform:uppercase;
+letter-spacing:0.05em;
+color:#43605a;
+font-weight:600;
+}
+
+.accuracy-value{
+font-size:38px;
+font-weight:700;
+line-height:1;
+color:#0f3d33;
+}
+
+.accuracy-link{
+font-size:14px;
+font-weight:600;
+color:#114b9b;
+text-decoration:none;
+border-bottom:1px solid rgba(17,75,155,0.35);
+padding-bottom:2px;
+cursor:pointer;
+}
+
+.accuracy-details{
+margin-top:14px;
+}
+
+.accuracy-details > summary{
+list-style:none;
+cursor:pointer;
+display:inline-block;
+}
+
+.accuracy-details > summary::-webkit-details-marker{ display:none; }
+.accuracy-details[open] > summary{ margin-bottom:10px; }
+
+.accuracy-subtext{
+margin-top:12px;
+font-size:13px;
+color:#2f4a42;
+}
+
+.accuracy-sections{
+margin-top:16px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:12px;
+}
+
+.accuracy-tile{
+background:#ffffff;
+border:1px solid #dae6e0;
+border-radius:10px;
+padding:10px 12px;
+}
+
+.accuracy-tile-name{ font-size:12px; color:#45615a; font-weight:600; }
+.accuracy-tile-value{ margin-top:6px; font-size:22px; font-weight:700; color:#123d34; }
+
+.accuracy-rationale{
+margin-top:16px;
+background:#ffffff;
+border:1px solid #dae6e0;
+border-radius:10px;
+padding:14px;
+}
+
+.accuracy-rationale h3{ margin:0 0 10px; font-size:16px; color:#173b45; }
+.accuracy-rationale ul{ margin:0; padding-left:18px; }
+.accuracy-rationale li{ margin-bottom:8px; font-size:13px; color:#334155; }
+
+@media(max-width:768px){
+body{ padding:16px; }
+.report{ padding:20px; }
+.score-dashboard,.score-cards{ flex-direction:column; align-items:stretch; }
+.card{ width:auto; }
+.accuracy-value{ font-size:30px; }
+}
+
+</style>
+</head>
+
+<body>
+<div class="report">
+
+<!-- HEADER -->
+<div class="header">
+    <h1>{{ report.header.entity_name }}</h1>
+    <div class="meta">
+        Location: {{ report.header.city if report.header.city else '—' }} |
+        Report Date: {{ report.header.report_date }}
+    </div>
+</div>
+
+<!-- GOVERNING BODY -->
+<div class="section">
+    <h2>Governing Body</h2>
+
+    {% if report.governing_body.name or report.governing_body.entity_type %}
+    <table>
+        <tr><th>Entity Name</th><td>{{ report.governing_body.name or '—' }}</td></tr>
+        <tr><th>Entity Type</th><td>{{ report.governing_body.entity_type or '—' }}</td></tr>
+        <tr><th>Year Established</th><td>{{ report.governing_body.year_established if report.governing_body.year_established else '—' }}</td></tr>
+        <tr><th>Registered Address</th><td>{{ report.governing_body.registered_address or '—' }}</td></tr>
+    </table>
+
+    {% if report.governing_body.governed_institutions %}
+    <h3>Institutions Operated</h3>
+    <ul>
+        {% for inst in report.governing_body.governed_institutions %}
+        <li>{{ inst }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if report.governing_body.trustees %}
+    <h3>Key Trustees</h3>
+    <table>
+        <tr><th>Name</th><th>Role</th></tr>
+        {% for trustee in report.governing_body.trustees %}
+        <tr>
+            <td>{{ trustee.get('name', '—') }}</td>
+            <td>{{ trustee.get('role', '—') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% else %}
+    <p class="no-data">No governing body data available.</p>
+    {% endif %}
+</div>
+
+<!-- EICH SCORE SUMMARY -->
+<div class="section">
+    <h2>EICH Score Summary</h2>
+
+    <div class="score-dashboard">
+        <div class="score-circle">{{ report.eich_score_summary.final_score }}</div>
+        <div class="score-cards">
+            <div class="card">
+                <div class="card-title">Financial Strength</div>
+                <div class="card-value">{{ report.eich_score_summary.financial_strength_score }}</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Outcome Strength</div>
+                <div class="card-value">{{ report.eich_score_summary.outcome_strength_score }}</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Gatekeeper Status</div>
+                <div class="card-value">
+                    {% if report.eich_score_summary.gatekeeper_status %}{{ report.eich_score_summary.gatekeeper_status }}{% else %}{{ report.eich_score_summary.rating or '—' }}{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Score Multipliers</h3>
+    <table>
+        <tr><th>Multiplier</th><th>Value</th></tr>
+        <tr><td>Accreditation Multiplier</td><td>{{ report.eich_score_summary.accreditation_multiplier }}</td></tr>
+        <tr><td>Institution Vintage Multiplier</td><td>{{ report.eich_score_summary.vintage_multiplier }}</td></tr>
+        <tr><td>City Tier Multiplier</td><td>{{ report.eich_score_summary.city_multiplier }}</td></tr>
+    </table>
+
+    {% if report.eich_score_summary.score_explanation %}
+    <h3>Score Explanation</h3>
+    <ul>
+        {% for item in report.eich_score_summary.score_explanation %}
+        <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<!-- KEY MANAGERIAL PERSONS -->
+<div class="section">
+    <h2>Key Managerial Persons</h2>
+
+    {% if report.kmp_summary.kmp_records %}
+    <table>
+        <tr><th>Name</th><th>Designation</th><th>Experience</th><th>Email</th></tr>
+        {% for kmp in report.kmp_summary.kmp_records %}
+        <tr>
+            <td>{{ kmp.full_name or '—' }}</td>
+            <td>{{ kmp.canonical_role or '—' }}</td>
+            <td>{{ kmp.experience if kmp.experience else 'None' }}</td>
+            <td>{{ kmp.email if kmp.email else 'None' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="no-data">No key managerial persons on record.</p>
+    {% endif %}
+</div>
+
+<!-- ASSOCIATED ENTITIES -->
+<div class="section">
+    <h2>Associated Entities</h2>
+
+    <div class="entity-legend">
+        <div class="entity-legend-item"><span class="legend-dot high"></span>Green = High confidence lead</div>
+        <div class="entity-legend-item"><span class="legend-dot medium"></span>Blue = Medium confidence lead</div>
+        <div class="entity-legend-item"><span class="legend-dot low"></span>Grey = Exploratory lead</div>
+    </div>
+
+    {% set ae_list = report.associated_entities if report.associated_entities is defined else [] %}
+
+    {% if ae_list %}
+    <div class="associated-entities">
+        {% for ent in ae_list %}
+        {% set conf = ent.get('confidence', 0)|float %}
+        {% if conf >= 0.75 %}
+            {% set conf_class = 'high' %}{% set conf_label = 'High Confidence' %}
+        {% elif conf >= 0.5 %}
+            {% set conf_class = 'medium' %}{% set conf_label = 'Medium Confidence' %}
+        {% else %}
+            {% set conf_class = 'low' %}{% set conf_label = 'Low Confidence' %}
+        {% endif %}
+        <div class="entity-card {{ conf_class }}" tabindex="0">
+            <div class="entity-card-header">
+                <div class="entity-title">
+                    <div class="entity-name">{{ ent.get('name', '—') }}</div>
+                    <div class="entity-type">{{ ent.get('entity_type', '') }}</div>
+                </div>
+                <div class="confidence-badge {{ conf_class }}">
+                    {{ conf_label }} {{ conf }}
+                </div>
+            </div>
+            {% if ent.get('relationship') %}
+            <div class="entity-relationship">{{ ent.get('relationship') }}</div>
+            {% endif %}
+            {% if ent.get('evidence') %}
+            <div class="entity-evidence"><strong>Evidence:</strong> {{ ent.get('evidence') }}</div>
+            {% endif %}
+            {% if conf_class == 'low' %}
+            <div class="entity-verification">Verification needed before RM outreach prioritization.</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="entity-empty-state">
+        <p class="no-data">No associated entities identified for this institution.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- RELATIONSHIP MAP -->
+<div class="section">
+    <h2>Relationship Map</h2>
+
+    {% if report.relationship_map %}
+    <table>
+        <tr><th>Source</th><th>Relationship</th><th>Target</th></tr>
+        {% for rel in report.relationship_map %}
+        <tr>
+            <td>{{ rel.get('source', '—') }}</td>
+            <td>{{ rel.get('relationship', '—') }}</td>
+            <td>{{ rel.get('target', '—') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p class="no-data">No relationship map data available.</p>
+    {% endif %}
+</div>
+
+<!-- INSTITUTION PROFILE -->
+<div class="section">
+    <h2>Institution Profile</h2>
+
+    <table>
+        <tr><th>Year of Establishment</th><td>{{ report.institution_profile.year_of_establishment if report.institution_profile.year_of_establishment else '—' }}</td></tr>
+        <tr><th>Regulatory Body</th><td>{{ report.institution_profile.regulatory_body or '—' }}</td></tr>
+        <tr><th>NAAC Grade</th><td>{{ report.institution_profile.naac_grade or '—' }}</td></tr>
+        <tr><th>Sanctioned Intake</th><td>{{ report.institution_profile.sanctioned_intake if report.institution_profile.sanctioned_intake else '—' }}</td></tr>
+        <tr>
+            <th>Main Programs</th>
+            <td>{% if report.institution_profile.main_programs %}{{ report.institution_profile.main_programs | join(', ') }}{% else %}—{% endif %}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- OUTCOME STRENGTH -->
+<div class="section">
+    <h2>Outcome Strength</h2>
+
+    <table>
+        <tr><th>Metric</th><th>Value</th></tr>
+        <tr>
+            <td>Placement Rate</td>
+            <td>{% if report.outcome_strength.placement_rate is not none %}{{ report.outcome_strength.placement_rate }}%{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Median Salary</td>
+            <td>{% if report.outcome_strength.median_salary_lpa is not none %}Rs {{ report.outcome_strength.median_salary_lpa }} LPA{% else %}No data{% endif %}</td>
+        </tr>
+        <tr>
+            <td>Higher Studies</td>
+            <td>{{ report.outcome_strength.higher_studies or 'No data' }}</td>
+        </tr>
+    </table>
+
+    {% if report.outcome_strength.top_recruiters %}
+    <h3>Top Recruiters</h3>
+    <ul>
+        {% for recruiter in report.outcome_strength.top_recruiters %}
+        <li>{{ recruiter }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+<!-- BANKING OPPORTUNITY INDICATORS -->
+<div class="section">
+    <h2>Banking Opportunity Indicators</h2>
+
+    {% if report.banking_opportunities['items'] %}
+    <div class="opportunity">
+        <table>
+            <tr><th>Indicator Type</th><th>Description</th><th>Potential Value</th></tr>
+            {% for opp in report.banking_opportunities['items'] %}
+            <tr>
+                <td>{{ opp.get('indicator_type', '—') }}</td>
+                <td>{{ opp.get('description', '—') }}</td>
+                <td>{{ opp.get('potential_value', '—') }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <p class="no-data">No banking opportunity indicators available.</p>
+    {% endif %}
+</div>
+
+<!-- INSTITUTION NETWORK -->
+<div class="section">
+    <h2>Institution Network</h2>
+
+    {% if report.institution_network %}
+    <ul>
+        {% for node in report.institution_network %}
+        <li>
+            {{ node.get('name', '—') }}{% if node.get('type') %} ({{ node.get('type') }}){% endif %}{% if node.get('relationship') %}: {{ node.get('relationship') }}{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-data">No institution network data available.</p>
+    {% endif %}
+</div>
+
+<!-- REPORT ACCURACY PANEL -->
+<div class="section accuracy-panel">
+    <div class="accuracy-header">
+        <div class="accuracy-overall">
+            <div class="accuracy-label">Report Accuracy</div>
+            <div class="accuracy-value">
+                {% if report.report_accuracy.overall is not none %}{{ "%.2f"|format(report.report_accuracy.overall) }}%{% else %}—{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <details class="accuracy-details" id="accuracy-rationale">
+        <summary class="accuracy-link">View Accuracy Rationale</summary>
+        <div class="accuracy-rationale">
+            <div class="accuracy-subtext">
+                Section-wise extraction confidence for this generated report.
+            </div>
+
+            {% if report.report_accuracy.sections %}
+            <div class="accuracy-sections">
+                {% for section_name, section_pct in report.report_accuracy.sections.items() %}
+                <div class="accuracy-tile">
+                    <div class="accuracy-tile-name">{{ section_name }}</div>
+                    <div class="accuracy-tile-value">{{ "%.2f"|format(section_pct) }}%</div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <h3>Detailed Rationale</h3>
+            <ul>
+                <li>Each section starts with weighted field completeness (present fields / expected fields).</li>
+                <li>Fallback and inferred values reduce section accuracy to reflect confidence impact.</li>
+                <li>Overall accuracy is a weighted mean of all section accuracies.</li>
+                <li>This is a report-confidence signal for debugging, not a ground-truth benchmark score.</li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+</div>
+</body>
+</html>
